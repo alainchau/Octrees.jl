@@ -7,7 +7,7 @@ function *(loc::LocationalCode, bits::String)
 end
 
 *(loc::LocationalCode, bits::Vector{Int}) = *(loc, join(string.(bits)))
-*(loc::LocationalCode, bits::Tuple{Int, Int, Int}) = *(loc, join(string.(bits)))
+*(loc::LocationalCode, bits::Tuple{Int,Int,Int}) = *(loc, join(string.(bits)))
 
 function LocationalCode(octree::Octree, p)
     binsize = 2^octree.maxdepth
@@ -31,16 +31,19 @@ end
 
 Base.lastindex(code::LocationalCode) = Base.lastindex(code.x)
 
-Base.iterate(code::LocationalCode) = ((parse(Int, code.x[1]),
-                                       parse(Int, code.y[1]),
-                                       parse(Int, code.z[1])),
-                                       2)
+Base.iterate(code::LocationalCode) =
+    ((parse(Int, code.x[1]), parse(Int, code.y[1]), parse(Int, code.z[1])), 2)
+
 function Base.iterate(code::LocationalCode, state)
     if state <= length(code.x)
-        return ((parse(Int, code.x[state]),
-                 parse(Int, code.y[state]),
-                 parse(Int, code.z[state])),
-                 state+1)
+        return (
+            (
+             parse(Int, code.x[state]),
+             parse(Int, code.y[state]),
+             parse(Int, code.z[state]),
+            ),
+            state + 1,
+        )
     else
         return nothing
     end
@@ -63,4 +66,4 @@ function code_to_cell(octree::Octree, code::LocationalCode)
     return cell
 end
 
-toint(code::LocationalCode) = parse(Int, code.x, base=2)
+toint(code::LocationalCode) = parse(Int, code.x, base = 2)

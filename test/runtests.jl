@@ -26,10 +26,9 @@ include("../src/misc/helper.jl") #import nearest neighbors
         @test i in code_to_cell(octree, LocationalCode(octree, X[:, i])).data.ids
     end
 
-
     # Check if brute force checking for nearest neighbors is equivalent to
     # finding nearest neighbors via octree.
-    for i in 1:5
+    for iteration in 1:10
         n = 100
         X = randn(3, n)
         p = [0, 0, 0.]
@@ -40,11 +39,3 @@ include("../src/misc/helper.jl") #import nearest neighbors
         @test octree_neighbors == actual_neighbors
     end
 end
-
-# julia> setdiff(Octrees.nearest_neighbors(X, 1:size(X, 2), [0,0,0], 1.), knn(octree, [0,0,0], 1.))
-# ℓ = 3  d = 5
-# 01010 01111 10010
-# 4-element Array{Int64,1}:
-#  10
-#  33
-#  85

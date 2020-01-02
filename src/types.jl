@@ -1,11 +1,10 @@
-struct Octree
-    X
-    root        # Parent cell
-    maxdepth
+struct Octree{T<:AbstractFloat}
+    X::Array{T}
+    root::Cell        # Parent cell
+    maxdepth::Int
 end
 
 struct LocationalCode
-    # TODO Should these bit strings be stored as symbols?
     x::String
     y::String
     z::String
@@ -13,8 +12,9 @@ end
 LocationalCode() = LocationalCode("", "", "")
 
 struct LeafData
-    ids
-    code
-    depth
+    ids::Array{Int}
+    code::LocationalCode
+    depth::Int
 end
-LeafData(;ids, code, depth) = LeafData(ids, code, depth)
+
+LeafData(; ids, code, depth) = LeafData(ids, code, depth)
