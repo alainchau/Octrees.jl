@@ -3,6 +3,9 @@ using Test
 using LinearAlgebra
 using Random
 
+using Plots
+include("../src/misc/plotstuff.jl")
+
 include("../src/misc/helper.jl") #import nearest neighbors
 
 @testset "Octrees.jl" begin
@@ -38,4 +41,10 @@ include("../src/misc/helper.jl") #import nearest neighbors
         actual_neighbors = nearest_neighbors(X, p, r) |> Set
         @test octree_neighbors == actual_neighbors
     end
+
+    # Plot octree of data projected onto xy-plane.
+    X = randn(3,100)
+    X[3,:] .= 0
+    plt = plot!(Octree(X))
+    savefig(plt, "../src/misc/octree_example.png")
 end

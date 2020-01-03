@@ -1,11 +1,13 @@
 # Plot stuff
 import Plots: plot!, plot3d!
+using RegionTrees
 
 function plot!(octree::Octree)
-    plt = plot(legend=nothing)
+    # plt = plot(legend=nothing)
+    plt = scatter(octree.X[1,:], octree.X[2,:], markersize=2, marker=:x, legend=nothing)
     for leaf in allleaves(octree.root)
        v = hcat(collect(vertices(leaf.boundary))...)
-       plot!(plt, v[1,[1,2,4,3,1]], v[2,[1,2,4,3,1]])
+       plot!(plt, v[1,[1,2,4,3,1]], v[2,[1,2,4,3,1]], color=:black)
    end
    plt
 end
