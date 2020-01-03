@@ -46,5 +46,5 @@ include("../src/misc/helper.jl") #import nearest neighbors
     X = randn(3,100)
     X[3,:] .= 0
     plt = plot!(Octree(X))
-    savefig(plt, "../src/misc/octree_example.png")
+    savefig(plt, "testoutput.png")
 end
