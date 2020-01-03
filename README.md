@@ -32,7 +32,6 @@ julia> plot!(octree)
 # Find nearest neighbors
 julia> nn = knn(octree, [0,0,0], 1) |> collect;
 julia> scatter!(X[1,nn], X[2,nn], markersize=3, color=:red)
-julia> scatter!(X[1,nn], X[2,nn], markersize=3, color=:red)
 
 # Draw circle to verify nearest neighbors
 julia> ts = range(0.,2π,length=100)
