@@ -5,7 +5,11 @@ function Base.display(cell::Cell)
     println("   ids = $(cell.data.ids)")
 end
 
-Base.display(octree::Octree) = Base.display(octree.root)
+function Base.display(octree::Octree)
+    print("origin = $(round.(octree.root.boundary.origin, digits=3)).")
+    print("\twidth =  $(round.(octree.root.boundary.widths[1], digits=3)).")
+    println("\tisleaf = $(isnothing(octree.root.children))")
+end
 
 struct MyRefinery <: AbstractRefinery
     tolerance::Float64
@@ -27,15 +31,15 @@ function needs_refinement(r::MyRefinery, cell)
 end
 
 function refine_data(r::MyRefinery, cell::Cell, indices)
-    newpoints = Int[]
-    for i in cell.data.ids
+    newpoints = Int32[]
+    @distributed for i in cell.data.ids
         if r.X[:, i] in child_boundary(cell, indices)
             push!(newpoints, i)
         end
     end
-    code = cell.data.code * (indices .- 1)    # Locational code
-    depth = cell.data.depth + 1                # Store depth
-    return LeafData(newpoints, code, depth)
+    return LeafData(ids = newpoints,
+                    code = cell.data.code * (indices .- 1),
+                    depth = cell.data.depth + 1)
 end
 
 """
@@ -55,8 +59,7 @@ function Octree(X::Array{S}, δ::T, K::Int) where {S<:M,T<:M} where {M<:Abstract
         maximum(maximum(X, dims = 2) - minimum(X, dims = 2)) .+ 2 * ϵ,
         size(X, 1),
     )...)
-    indices = collect(1:size(X, 2))
-    root = Cell(origin, widths, LeafData(indices, LocationalCode(), 0))
+    root = Cell(origin, widths, LeafData(collect(1:size(X, 2)), LocationalCode(), 0))
     adaptivesampling!(root, r)
 
     # Find max depth
