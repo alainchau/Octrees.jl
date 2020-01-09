@@ -1,3 +1,5 @@
+using Distributed
+
 # Read this and parallelize this stuff
 # https://techytok.com/multiprocessing-in-julia-module/
 

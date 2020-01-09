@@ -65,13 +65,8 @@ function Octree(X::Array{S}, δ::T, K::Int) where {S<:M,T<:M} where {M<:Abstract
     
     # Find max depth
     print("Finding max depth..")
-    maxdepth = 0
-    for leaf in allleaves(root)
-        print(leaf.data.depth, " ")
-        maxdepth = max(maxdepth, leaf.data.depth)
-    end
-    # TODO I think the following hangs but not sure why. So use an explicit for loop for now.
-    # maxdepth = maximum(map(x -> x.data.depth, allleaves(root)))
+    # TODO the following hangs when there is a Makie window open.
+    maxdepth = maximum(map(x -> x.data.depth, allleaves(root)))
     println(" finished.")
     
     return Octree(X, root, maxdepth)

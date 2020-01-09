@@ -7,7 +7,6 @@ import RegionTrees: AbstractRefinery, needs_refinement, refine_data
 using StaticArrays
 using LinearAlgebra
 using Random
-using Distributed
 
 include("types.jl")
 include("codes.jl")

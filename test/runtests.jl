@@ -34,14 +34,30 @@ include("../src/misc/helper.jl") #import nearest neighbors
     for iteration in 1:10
         n = 100
         X = randn(3, n)
-        p = [0, 0, 0.]
+        p = X[:, 1]
         r = 0.5
-        octree = Octree(X, 0.05, 1)
+        octree = Octree(X)
         octree_neighbors = knn(octree, p, r)
         actual_neighbors = nearest_neighbors(X, p, r) |> Set
         @test octree_neighbors == actual_neighbors
     end
 
+    # Sample from sphere
+    for iteration in 1:10
+        n = 300
+        X = randn(3, n)
+        X ./= mapslices(norm, X, dims=1)
+        p = X[:, 1]
+        r = 0.2
+        octree = Octree(X)
+        octree_neighbors = knn(octree, p, r)
+        actual_neighbors = nearest_neighbors(X, p, r) |> Set
+        @test octree_neighbors == actual_neighbors
+    end
+
+    
+
+    
     # Plot octree of data projected onto xy-plane.
     X = randn(3,100)
     X[3,:] .= 0
